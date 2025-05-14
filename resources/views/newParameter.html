@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <title>Parameter</title>
+    <style>
+        body {
+            font-family: 'League Spartan', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#FBF6E9] flex">
+    <aside class="hidden md:flex flex-col items-center bg-[#118B50] w-64 min-h-screen p-4 text-white">
+        <img src="img/logo.png" class="w-48 mb-2">
+        <img src="img/pp.webp" class="w-36 mb-4">
+        <p class="text-lg">Selamat Datang,</p>
+        <p class="font-bold text-xl">User</p>
+        <nav class="mt-6 w-full">
+            <a href="#" class="block py-2 border-b border-white text-2xl font-bold text-center">Utama</a>
+            <a href="#" class="block py-2 border-b border-white text-2xl text-center">Prediksi</a>
+            <a href="#" class="block py-2 border-b border-white text-2xl text-center">Logout</a>
+        </nav>
+    </aside>
+    
+    <main class="flex-grow p-6">
+        <h1 class="text-4xl font-bold text-[#41270C]">Parameter Tanaman</h1>
+        
+        <h2 class="text-3xl text-[#41270C] font-bold mt-10">Pilih Tanaman</h2>
+        <div class="relative inline-block mt-3">
+            <button id="dropdownButton" class="bg-[#74512D] text-white py-2 px-4 rounded-md">Semua
+                
+            </button>
+            <ul id="dropdownMenu" class="hidden absolute bg-[#74512D] text-white mt-2 w-full rounded-md">
+                <li><a href="#" class="block px-4 py-2" data-filter="pakcoy">Pakcoy</a></li>
+                <li><a href="#" class="block px-4 py-2" data-filter="seledri">Seledri</a></li>
+                <li><a href="#" class="block px-4 py-2" data-filter="selada">Selada</a></li>
+                <li><a href="#" class="block px-4 py-2" data-filter="semua">Semua</a></li>
+            </ul>
+        </div>
+
+        <div id="plantData" class="mt-6 space-y-10">
+            <div class="filter-item pakcoy">
+                <h2 class="text-center text-3xl font-bold text-[#41270C]">PAKCOY</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">25°C</h1>
+                        <p>Temperature</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">7.00</h1>
+                        <p>pH</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">674</h1>
+                        <p>TDS</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-item seledri hidden">
+                <h2 class="text-center text-3xl font-bold text-[#41270C]">SELEDRI</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">22°C</h1>
+                        <p>Temperature</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">6.50</h1>
+                        <p>pH</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">700</h1>
+                        <p>TDS</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-item selada hidden">
+                <h2 class="text-center text-3xl font-bold text-[#41270C]">SELADA</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">20°C</h1>
+                        <p>Temperature</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">6.00</h1>
+                        <p>pH</p>
+                    </div>
+                    <div class="bg-[#118B50] text-white p-6 rounded-3xl shadow-lg text-center h-48 flex flex-col justify-center">
+                        <h1 class="text-6xl">650</h1>
+                        <p>TDS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.getElementById("dropdownButton").addEventListener("click", function() {
+            document.getElementById("dropdownMenu").classList.toggle("hidden");
+        });
+
+        document.querySelectorAll("#dropdownMenu a").forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.preventDefault();
+                let filter = this.getAttribute("data-filter");
+                document.getElementById("dropdownButton").textContent = this.textContent;
+
+                document.querySelectorAll(".filter-item").forEach(section => {
+                    section.style.display = (filter === "semua" || section.classList.contains(filter)) ? "block" : "none";
+                });
+
+                document.getElementById("dropdownMenu").classList.add("hidden");
+            });
+        });
+    </script>
+</body>
+</html>
