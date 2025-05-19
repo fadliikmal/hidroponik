@@ -61,10 +61,10 @@
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <ul id="dropdownMenu" class="hidden absolute bg-[#74512D] text-white mt-2 w-full rounded-md z-10">
-                <li><a href="#" class="block px-4 py-2 flex items-center gap-2" data-filter="pakcoy" data-icon="🥬">🥬 Pakcoy</a></li>
-                <li><a href="#" class="block px-4 py-2 flex items-center gap-2" data-filter="seledri" data-icon="🌿">🌿 Seledri</a></li>
-                <li><a href="#" class="block px-4 py-2 flex items-center gap-2" data-filter="selada" data-icon="🥗">🥗 Selada</a></li>
-                <li><a href="#" class="block px-4 py-2 flex items-center gap-2" data-filter="semua" data-icon="🌱">🌱 Semua</a></li>
+                <li><a href="#" class="block px-4 py-2 items-center gap-2" data-filter="pakcoy" data-icon="🥬">🥬 Pakcoy</a></li>
+                <li><a href="#" class="block px-4 py-2 items-center gap-2" data-filter="seledri" data-icon="🌿">🌿 Seledri</a></li>
+                <li><a href="#" class="block px-4 py-2 items-center gap-2" data-filter="selada" data-icon="🥗">🥗 Selada</a></li>
+                <li><a href="#" class="block px-4 py-2 items-center gap-2" data-filter="semua" data-icon="🌱">🌱 Semua</a></li>
             </ul>
         </div>
 
@@ -75,27 +75,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Suhu -->
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">25°C</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->suhu ?? '-' }}°C</div>
                         <div class="text-white text-sm mb-1">Suhu</div>
-                        <div class="text-xs text-white">Tertinggi: <b>27°C</b></div>
-                        <div class="text-xs text-white">Terendah: <b>24.5°C</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>26.7°C</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('suhu') ? number_format($chartData->avg('suhu'), 2) : '-' }}°C</b></div>
                     </div>
                     <!-- pH -->
                     <div class="bg-gradient-to-br from-[#4A321D] to-[#118B50] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">7.00</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->pH ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">pH</div>
-                        <div class="text-xs text-white">Tertinggi: <b>7.2</b></div>
-                        <div class="text-xs text-white">Terendah: <b>6.8</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>7.0</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('pH') ? number_format($chartData->avg('pH'), 2) : '-' }}</b></div>
                     </div>
                     <!-- TDS -->
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">674</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->TDS ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">TDS</div>
-                        <div class="text-xs text-white">Tertinggi: <b>700</b></div>
-                        <div class="text-xs text-white">Terendah: <b>650</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>674</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('TDS') ? number_format($chartData->avg('TDS'), 2) : '-' }}</b></div>
                     </div>
                 </div>
                 <div class="flex justify-center mt-3">
@@ -113,25 +113,25 @@
                 <h2 class="text-center text-4xl font-bold text-[#41270C] mb-3">SELEDRI</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">22°C</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->suhu ?? '-' }}°C</div>
                         <div class="text-white text-sm mb-1">Suhu</div>
-                        <div class="text-xs text-white">Tertinggi: <b>24°C</b></div>
-                        <div class="text-xs text-white">Terendah: <b>21°C</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>22.5°C</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('suhu') ? number_format($chartData->avg('suhu'), 2) : '-' }}°C</b></div>
                     </div>
                     <div class="bg-gradient-to-br from-[#4A321D] to-[#118B50] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">6.50</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->pH ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">pH</div>
-                        <div class="text-xs text-white">Tertinggi: <b>7.0</b></div>
-                        <div class="text-xs text-white">Terendah: <b>6.3</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>6.7</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('pH') ? number_format($chartData->avg('pH'), 2) : '-' }}</b></div>
                     </div>
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">700</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->TDS ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">TDS</div>
-                        <div class="text-xs text-white">Tertinggi: <b>730</b></div>
-                        <div class="text-xs text-white">Terendah: <b>690</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>705</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('TDS') ? number_format($chartData->avg('TDS'), 2) : '-' }}</b></div>
                     </div>
                 </div>
                 <div class="flex justify-center mt-3">
@@ -149,25 +149,25 @@
                 <h2 class="text-center text-4xl font-bold text-[#41270C] mb-3">SELADA</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">20°C</div>
-                        <div class="text-white text- mb-1">Suhu</div>
-                        <div class="text-xs text-white">Tertinggi: <b>22°C</b></div>
-                        <div class="text-xs text-white">Terendah: <b>19°C</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>20.5°C</b></div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->suhu ?? '-' }}°C</div>
+                        <div class="text-white text-sm mb-1">Suhu</div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('suhu') ?? '-' }}°C</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('suhu') ? number_format($chartData->avg('suhu'), 2) : '-' }}°C</b></div>
                     </div>
                     <div class="bg-gradient-to-br from-[#4A321D] to-[#118B50] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">6.00</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->pH ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">pH</div>
-                        <div class="text-xs text-white">Tertinggi: <b>6.5</b></div>
-                        <div class="text-xs text-white">Terendah: <b>5.8</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>6.2</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('pH') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('pH') ? number_format($chartData->avg('pH'), 2) : '-' }}</b></div>
                     </div>
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
-                        <div class="text-4xl font-bold text-white mb-1">650</div>
+                        <div class="text-4xl font-bold text-white mb-1">{{ $latest->TDS ?? '-' }}</div>
                         <div class="text-white text-sm mb-1">TDS</div>
-                        <div class="text-xs text-white">Tertinggi: <b>670</b></div>
-                        <div class="text-xs text-white">Terendah: <b>640</b></div>
-                        <div class="text-xs text-white">Rata-rata: <b>655</b></div>
+                        <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('TDS') ?? '-' }}</b></div>
+                        <div class="text-xs text-white">Rata-rata: <b>{{ $chartData->avg('TDS') ? number_format($chartData->avg('TDS'), 2) : '-' }}</b></div>
                     </div>
                 </div>
                 <div class="flex justify-center mt-3">

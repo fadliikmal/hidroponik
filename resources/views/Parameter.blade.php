@@ -94,25 +94,30 @@
             });
         });
 
-        // Chart.js data & filter parameter
+        // Data dari backend
+        const chartLabels = {!! json_encode($chartData->pluck('record_date')) !!};
+        const suhuData = {!! json_encode($chartData->pluck('suhu')->map(fn($v) => (float)$v)) !!};
+        const phData = {!! json_encode($chartData->pluck('pH')->map(fn($v) => (float)$v)) !!};
+        const tdsData = {!! json_encode($chartData->pluck('TDS')->map(fn($v) => (float)$v)) !!};
+
         const chartData = {
             month: {
-                labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
-                temperature: [24, 25, 26, 25, 24, 25, 26, 25, 24, 25, 26, 25],
-                ph: [6.8, 7, 7.1, 7, 6.9, 7, 7.1, 7, 6.9, 7, 7.1, 7],
-                tds: [650, 660, 670, 680, 690, 700, 710, 700, 690, 680, 670, 660]
+                labels: chartLabels,
+                temperature: suhuData,
+                ph: phData,
+                tds: tdsData,
             },
             week: {
-                labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
-                temperature: [25, 25, 26, 25, 24, 25, 26],
-                ph: [7, 7, 7.1, 7, 6.9, 7, 7.1],
-                tds: [670, 680, 690, 700, 710, 700, 690]
+                labels: chartLabels.slice(-7),
+                temperature: suhuData.slice(-7),
+                ph: phData.slice(-7),
+                tds: tdsData.slice(-7),
             },
             day: {
-                labels: ['00','04','08','12','16','20'],
-                temperature: [25, 25, 26, 25, 24, 25],
-                ph: [7, 7, 7.1, 7, 6.9, 7],
-                tds: [670, 680, 690, 700, 710, 700]
+                labels: chartLabels.slice(-1),
+                temperature: suhuData.slice(-1),
+                ph: phData.slice(-1),
+                tds: tdsData.slice(-1),
             }
         };
         let currentTime = 'month';

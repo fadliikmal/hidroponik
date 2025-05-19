@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,15 +49,19 @@
                 <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-3xl shadow-2xl p-6 flex flex-col items-center hover:scale-105 transition">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xl font-bold text-white tracking-wide">Suhu</span>
-                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">Normal</span>
+                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">
+                            {{ (isset($latest) && $latest->suhu >= 30) ? 'Tinggi' : 'Normal' }}
+                        </span>
                     </div>
                     <div class="flex flex-col justify-center items-center bg-[#4A321D] w-32 h-32 rounded-full shadow-md mb-4 border-4 border-[#FAF7EB]">
-                        <div class="text-3xl text-[#FAF7EB] font-bold">25°C</div>
+                        <div class="text-3xl text-[#FAF7EB] font-bold">{{ $latest->suhu ?? '-' }}°C</div>
                         <div class="text-sm text-[#FAF7EB]">Saat Ini</div>
                     </div>
-                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">27°C</span></div>
-                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">24.5°C</span></div>
-                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">26.7°C</span></div>
+                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">{{ $chartData->max('suhu') ?? '-' }}°C</span></div>
+                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">{{ $chartData->min('suhu') ?? '-' }}°C</span></div>
+                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">
+                        {{ $chartData->avg('suhu') ? number_format($chartData->avg('suhu'), 2) : '-' }}°C
+                    </span></div>
                     <div class="bg-[#EAF2BB] text-[#3B240C] w-full mt-4 rounded-lg p-2 text-center font-semibold shadow">
                         Alarm: 30°C / -10°C
                     </div>
@@ -65,15 +70,19 @@
                 <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-3xl shadow-2xl p-6 flex flex-col items-center hover:scale-105 transition">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xl font-bold text-white tracking-wide">pH</span>
-                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">Normal</span>
+                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">
+                            {{ (isset($latest) && $latest->pH >= 8 || $latest->pH <= 6) ? 'Tidak Normal' : 'Normal' }}
+                        </span>
                     </div>
                     <div class="flex flex-col justify-center items-center bg-[#4A321D] w-32 h-32 rounded-full shadow-md mb-4 border-4 border-[#FAF7EB]">
-                        <div class="text-3xl text-[#FAF7EB] font-bold">7.00</div>
+                        <div class="text-3xl text-[#FAF7EB] font-bold">{{ $latest->pH ?? '-' }}</div>
                         <div class="text-sm text-[#FAF7EB]">Saat Ini</div>
                     </div>
-                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">7.2</span></div>
-                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">6.8</span></div>
-                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">7.0</span></div>
+                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">{{ $chartData->max('pH') ?? '-' }}</span></div>
+                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">{{ $chartData->min('pH') ?? '-' }}</span></div>
+                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">
+                        {{ $chartData->avg('pH') ? number_format($chartData->avg('pH'), 2) : '-' }}
+                    </span></div>
                     <div class="bg-[#EAF2BB] text-[#3B240C] w-full mt-4 rounded-lg p-2 text-center font-semibold shadow">
                         Alarm: 8.00 / 6.00
                     </div>
@@ -82,15 +91,19 @@
                 <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-3xl shadow-2xl p-6 flex flex-col items-center hover:scale-105 transition">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xl font-bold text-white tracking-wide">TDS</span>
-                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">Normal</span>
+                        <span class="ml-2 px-2 py-1 rounded bg-[#EAF2BB] text-xs text-[#3B240C] font-semibold">
+                            {{ (isset($latest) && $latest->TDS >= 800 || $latest->TDS <= 600) ? 'Tidak Normal' : 'Normal' }}
+                        </span>
                     </div>
                     <div class="flex flex-col justify-center items-center bg-[#4A321D] w-32 h-32 rounded-full shadow-md mb-4 border-4 border-[#FAF7EB]">
-                        <div class="text-3xl text-[#FAF7EB] font-bold">674</div>
+                        <div class="text-3xl text-[#FAF7EB] font-bold">{{ $latest->TDS ?? '-' }}</div>
                         <div class="text-sm text-[#FAF7EB]">Saat Ini</div>
                     </div>
-                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">700</span></div>
-                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">650</span></div>
-                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">674</span></div>
+                    <div class="text-white mb-1 text-sm">Tertinggi: <span class="font-bold">{{ $chartData->max('TDS') ?? '-' }}</span></div>
+                    <div class="text-white mb-1 text-sm">Terendah: <span class="font-bold">{{ $chartData->min('TDS') ?? '-' }}</span></div>
+                    <div class="text-white mb-3 text-sm">Rata-rata: <span class="font-bold">
+                        {{ $chartData->avg('TDS') ? number_format($chartData->avg('TDS'), 2) : '-' }}
+                    </span></div>
                     <div class="bg-[#EAF2BB] text-[#3B240C] w-full mt-4 rounded-lg p-2 text-center font-semibold shadow">
                         Alarm: 800 / 600
                     </div>
@@ -123,31 +136,36 @@
     </div>
 
     <script>
-        // Data dummy untuk chart utama
+        // Data dari backend
+        const chartLabels = {!! json_encode($chartData->pluck('record_date')) !!};
+        const suhuData = {!! json_encode($chartData->pluck('suhu')->map(fn($v) => (float)$v)) !!};
+        const phData = {!! json_encode($chartData->pluck('pH')->map(fn($v) => (float)$v)) !!};
+        const tdsData = {!! json_encode($chartData->pluck('TDS')->map(fn($v) => (float)$v)) !!};
+
         const chartData = {
             month: {
-                labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
-                temperature: [30, 40, 60, 90, 70, 50, 40, 60, 70, 80, 90, 100],
-                ph: [7, 7.1, 7.2, 7.3, 7.1, 7, 7.2, 7.3, 7.1, 7, 7.2, 7.3],
-                tds: [650, 670, 690, 710, 700, 690, 680, 670, 660, 650, 640, 630],
+                labels: chartLabels,
+                temperature: suhuData,
+                ph: phData,
+                tds: tdsData,
             },
             week: {
-                labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
-                temperature: [60, 70, 80, 90, 80, 70, 60],
-                ph: [7, 7.1, 7.2, 7.3, 7.1, 7, 7.2],
-                tds: [650, 670, 690, 710, 700, 690, 680],
+                labels: chartLabels.slice(-7),
+                temperature: suhuData.slice(-7),
+                ph: phData.slice(-7),
+                tds: tdsData.slice(-7),
             },
             day: {
-                labels: ['00','04','08','12','16','20'],
-                temperature: [60, 70, 80, 90, 80, 70],
-                ph: [7, 7.1, 7.2, 7.3, 7.1, 7],
-                tds: [650, 670, 690, 710, 700, 690],
+                labels: chartLabels.slice(-1),
+                temperature: suhuData.slice(-1),
+                ph: phData.slice(-1),
+                tds: tdsData.slice(-1),
             }
         };
 
         const paramColors = {
             temperature: {bg: '#7DBB9C', legend: 'bg-[#7DBB9C]', label: 'Temperature', type: 'bar'},
-            ph: {bg: '#F59E42', legend: 'bg-[#EAF2BB]', label: 'pH', type: 'bar'},
+            ph: {bg: '#F59E42', legend: 'bg-[#F59E42]', label: 'pH', type: 'bar'},
             tds: {bg: '#B29776', legend: 'bg-[#B29776]', label: 'TDS', type: 'bar'},
         };
 

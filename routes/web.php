@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\unsurController;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -14,15 +15,7 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/dashboard', function () {
-    return view('Parameter');
+Route::get('/dashboard', [unsurController::class, 'index'])->name('dashboard');
 
-})->middleware('auth')->name('dashboard');
-
-Route::get('/sensor/detail', function () {
-    return view('suhutailwind');
-})->name('suhu');
-
-Route::get('/sensor', function () {
-    return view('sensor');
-})->name('sensor');
+Route::get('/sensor/detail', [unsurController::class, 'suhu'])->name('suhu');
+Route::get('/sensor', [unsurController::class, 'sensor'])->name('sensor');
