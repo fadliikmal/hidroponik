@@ -19,3 +19,5 @@ Route::get('/dashboard', [unsurController::class, 'index'])->name('dashboard');
 
 Route::get('/sensor/detail', [unsurController::class, 'suhu'])->name('suhu');
 Route::get('/sensor', [unsurController::class, 'sensor'])->name('sensor');
+
+Route::get('/fetch-all-api', [unsurController::class, 'fetchAllFromApi']);
