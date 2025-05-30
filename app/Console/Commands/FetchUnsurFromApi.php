@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use App\Models\unsur;
+use Carbon\Carbon; // Tambahkan di atas
 
 class FetchUnsurFromApi extends Command
 {
@@ -29,25 +30,28 @@ class FetchUnsurFromApi extends Command
     {
         $response = Http::get('https://iot.labfit.id/api/ph');
         if ($response->successful()) {
-            $data = $response->json();
+            $datas = $response->json();
 
-            // Cek apakah data sudah ada (misal berdasarkan created_at atau nilai unik lain)
-            $exists = unsur::where('record_date', $data['created_at'] ?? now()->toDateString())
-                ->where('pH', $data['ph'] ?? null)
-                ->where('TDS', $data['tds'] ?? null)
-                ->where('suhu', $data['suhu'] ?? null)
-                ->exists();
+            foreach ($datas as $data) {
+                $recordDate = isset($data['created_at'])
+                    ? Carbon::parse($data['created_at'])->format('Y-m-d H:i:s')
+                    : now();
 
-            if (!$exists) {
-                unsur::create([
-                    'record_date' => $data['created_at'] ?? now()->toDateString(),
-                    'pH'         => $data['ph'] ?? null,
-                    'TDS'        => $data['tds'] ?? null,
-                    'suhu'       => $data['suhu'] ?? null,
-                ]);
-                $this->info('Data baru berhasil ditambahkan.');
-            } else {
-                $this->info('Data sudah ada, tidak ditambahkan ulang.');
+                $exists = unsur::where('record_date', $recordDate)
+                    ->where('pH', $data['ph'] ?? null)
+                    ->where('suhu', $data['temperature'] ?? null)
+                    ->exists();
+
+                if (!$exists) {
+                    unsur::create([
+                        'record_date' => $recordDate,
+                        'pH'          => $data['ph'] ?? null,
+                        'suhu'        => $data['temperature'] ?? null,
+                    ]);
+                    $this->info('Data baru berhasil ditambahkan.');
+                } else {
+                    $this->info('Data sudah ada, tidak ditambahkan ulang.');
+                }
             }
         } else {
             $this->error('Gagal ambil data API');

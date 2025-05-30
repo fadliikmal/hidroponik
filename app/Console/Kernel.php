@@ -9,7 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule)
     {
-        // Tambahkan command scheduler di sini
+
         $schedule->command('unsur:fetch-api')->everyMinute();
     }
 
