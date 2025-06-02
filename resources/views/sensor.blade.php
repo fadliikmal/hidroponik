@@ -44,12 +44,15 @@
             <p class="text-lg">Selamat Datang,</p>
             <p class="font-bold text-xl mb-4">User</p>
             <nav class="mt-6 w-full flex-1">
-                <a href="{{ url('/dashboard') }}" class="block py-2 border-b border-white text-2xl  text-center sidebar-link {{ request()->is('dashboard') ? 'sidebar-active' : '' }}">🏠 Dashboard</a>
-                <a href="{{ url('/sensor') }}" class="block py-2 border-b border-white text-2xl text-center sidebar-link {{ request()->is('sensor') ? 'sidebar-active' : '' }}">🖥️ Sensor</a>
+                <a href="{{ url('/dashboard') }}" class="block py-2 border-b border-white text-2xl  text-center sidebar-link {{ request()->is('dashboard') ? 'sidebar-active' : '' }}"> Dashboard</a>
+                <a href="{{ url('/sensor') }}" class="block py-2 border-b border-white text-2xl text-center sidebar-link {{ request()->is('sensor') ? 'sidebar-active' : '' }}"> Sensor</a>
             </nav>
         </div>
         <div class="w-full">
-            <a href="#" class="block py-2 mt-8 border-t border-white text-2xl text-center sidebar-link hover:text-red-400 transition">🚪 Logout</a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="block py-2 mt-8 border-t border-white text-2xl text-center sidebar-link hover:text-red-400 transition bg-transparent"> Logout</button>
+            </form>
         </div>
     </aside>
     <main class="flex-grow p-4 md:p-6">
