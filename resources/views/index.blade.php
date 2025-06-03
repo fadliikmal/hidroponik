@@ -22,7 +22,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- Custom CSS --}}
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="https://dashboard-iot.labfit.id/assets/css/style.css">
 
     <title>Landing Page</title>
 </head>
