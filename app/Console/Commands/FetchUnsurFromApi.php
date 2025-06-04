@@ -28,7 +28,7 @@ class FetchUnsurFromApi extends Command
      */
     public function handle()
     {
-        $response = Http::get('https://iot.labfit.id/api/ph');
+        $response = Http::get('http://127.0.0.1:3000/api/ph');
         if ($response->successful()) {
             $datas = $response->json();
 
@@ -40,6 +40,7 @@ class FetchUnsurFromApi extends Command
                 $exists = unsur::where('record_date', $recordDate)
                     ->where('pH', $data['ph'] ?? null)
                     ->where('suhu', $data['temperature'] ?? null)
+                    ->where('TDS', $data['tds'] ?? null)
                     ->exists();
 
                 if (!$exists) {
@@ -47,6 +48,7 @@ class FetchUnsurFromApi extends Command
                         'record_date' => $recordDate,
                         'pH'          => $data['ph'] ?? null,
                         'suhu'        => $data['temperature'] ?? null,
+                        'TDS'        => $data['tds'] ?? null,
                     ]);
                     $this->info('Data baru berhasil ditambahkan.');
                 } else {
