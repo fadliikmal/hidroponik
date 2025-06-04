@@ -32,28 +32,34 @@ class FetchUnsurFromApi extends Command
         if ($response->successful()) {
             $datas = $response->json();
 
-            foreach ($datas as $data) {
-                $recordDate = isset($data['created_at'])
-                    ? Carbon::parse($data['created_at'])->format('Y-m-d H:i:s')
+            // Ambil data paling baru saja
+            if (is_array($datas) && count($datas) > 0) {
+                // Jika data sudah terurut, ambil data terakhir
+                $latestData = end($datas);
+
+                $recordDate = isset($latestData['created_at'])
+                    ? Carbon::parse($latestData['created_at'])->format('Y-m-d H:i:s')
                     : now();
 
                 $exists = unsur::where('record_date', $recordDate)
-                    ->where('pH', $data['ph'] ?? null)
-                    ->where('suhu', $data['temperature'] ?? null)
-                    ->where('TDS', $data['tds'] ?? null)
+                    ->where('pH', $latestData['ph'] ?? null)
+                    ->where('suhu', $latestData['temperature'] ?? null)
+                    ->where('TDS', $latestData['tds'] ?? null)
                     ->exists();
 
                 if (!$exists) {
                     unsur::create([
                         'record_date' => $recordDate,
-                        'pH'          => $data['ph'] ?? null,
-                        'suhu'        => $data['temperature'] ?? null,
-                        'TDS'        => $data['tds'] ?? null,
+                        'pH'          => $latestData['ph'] ?? null,
+                        'suhu'        => $latestData['temperature'] ?? null,
+                        'TDS'         => $latestData['tds'] ?? null,
                     ]);
                     $this->info('Data baru berhasil ditambahkan.');
                 } else {
                     $this->info('Data sudah ada, tidak ditambahkan ulang.');
                 }
+            } else {
+                $this->error('Tidak ada data terbaru dari API');
             }
         } else {
             $this->error('Gagal ambil data API');
