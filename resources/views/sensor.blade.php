@@ -88,7 +88,6 @@
                     <!-- pH -->
                     <div class="bg-gradient-to-br from-[#4A321D] to-[#118B50] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
                         <div class="text-4xl font-bold text-white mb-1">{{ $latest->pH ?? '-' }}</div>
-                        <div class="text-xs text-white">{{ $latest->record_date }}</div>
                         <div class="text-white text-sm mb-1">pH</div>
                         <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('pH') ?? '-' }}</b></div>
                         <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('pH') ?? '-' }}</b></div>
