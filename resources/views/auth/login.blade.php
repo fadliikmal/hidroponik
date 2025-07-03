@@ -7,7 +7,7 @@
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Login Page</title>
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">
     <!-- Google Fonts (Opsional) -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan&display=swap" rel="stylesheet">
     <style>

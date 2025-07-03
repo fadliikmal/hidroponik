@@ -23,7 +23,7 @@
 
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="https://dashboard-iot.labfit.id/assets/css/style.css">
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">
     <title>Landing Page</title>
 </head>
 

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Register Page</title>
   <link href="https://fonts.googleapis.com/css?family=League+Spartan" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -46,7 +47,6 @@
       @endif
 
       <form method="POST" action="{{ route('register') }}">
-        @csrf
         <div class="mb-4">
           <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
           <input type="text" name="name" id="name" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('name') }}" />
