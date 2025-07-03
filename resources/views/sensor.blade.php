@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -87,6 +88,7 @@
                     <!-- pH -->
                     <div class="bg-gradient-to-br from-[#4A321D] to-[#118B50] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
                         <div class="text-4xl font-bold text-white mb-1">{{ $latest->pH ?? '-' }}</div>
+                        <div class="text-xs text-white">{{ $latest->record_date }}</div>
                         <div class="text-white text-sm mb-1">pH</div>
                         <div class="text-xs text-white">Tertinggi: <b>{{ $chartData->max('pH') ?? '-' }}</b></div>
                         <div class="text-xs text-white">Terendah: <b>{{ $chartData->min('pH') ?? '-' }}</b></div>
@@ -112,7 +114,7 @@
             </div>
 
             <!-- Seledri Card -->
-            <div class="filter-item seledri">
+            {{-- <div class="filter-item seledri">
                 <h2 class="text-center text-4xl font-bold text-[#41270C] mb-3">SELEDRI</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] rounded-2xl shadow-lg p-4 flex flex-col items-center hover:scale-105 transition">
@@ -181,7 +183,7 @@
                         </svg>
                     </a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </main>
     <script>
