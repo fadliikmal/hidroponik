@@ -6,6 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Suhu</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">
     <style>
         .sidebar-link {
             transition: transform 0.15s, font-weight 0.15s, color 0.15s;
@@ -122,9 +123,9 @@
                         <button class="px-3 py-1 rounded bg-[#B29776] text-[#3B240C] text-xs font-semibold param-btn active" data-param="tds">TDS</button>
                     </div>
                     <div class="flex gap-2">
-                        <button class="px-3 py-1 rounded bg-[#7DBB9C] text-[#3B240C] text-xs font-semibold time-btn active" data-time="month">Month</button>
-                        <button class="px-3 py-1 rounded text-[#74512D] text-xs font-semibold hover:bg-[#EAF2BB] time-btn" data-time="week">Week</button>
-                        <button class="px-3 py-1 rounded text-[#74512D] text-xs font-semibold hover:bg-[#EAF2BB] time-btn" data-time="day">Day</button>
+                        <button class="px-3 py-1 rounded bg-[#7DBB9C] text-[#3B240C] text-xs font-semibold time-btn hover:bg-[#7DBB9C]" data-time="month">Month</button>
+                        <button class="px-3 py-1 rounded text-[#3B240C] text-xs font-semibold hover:bg-[#7DBB9C] time-btn" data-time="week">Week</button>
+                        <button class="px-3 py-1 rounded text-[#3B240C] text-xs font-semibold hover:bg-[#7DBB9C] time-btn" data-time="day">Day</button>
                     </div>
                 </div>
                 <canvas id="mainChart" height="100"></canvas>
@@ -165,9 +166,37 @@
             }
         };
 
+        // --- Filter Hari: Data pada tanggal terakhir, dipisah per jam ---
+        // Asumsi: chartLabels berisi tanggal (YYYY-MM-DD), dan ada array createdAtData berisi waktu lengkap (YYYY-MM-DD HH:mm:ss)
+        const createdAtData = {!! json_encode($chartData->pluck('created_at')) !!};
+
+        // Ambil tanggal terakhir dari createdAtData
+        const lastDate = createdAtData.length > 0 ? createdAtData[createdAtData.length - 1].slice(0, 10) : null;
+
+        // Ambil semua data pada tanggal terakhir
+        const dayIndices = [];
+        const hourMap = {};
+        for (let i = 0; i < createdAtData.length; i++) {
+            if (createdAtData[i].slice(0, 10) === lastDate) {
+                const hour = createdAtData[i].slice(0, 13); // YYYY-MM-DD HH
+                // Simpan data terakhir untuk setiap jam
+                hourMap[hour] = i;
+            }
+        }
+        const sortedHours = Object.keys(hourMap).sort();
+        const sortedIndices = sortedHours.map(h => hourMap[h]);
+
+        chartData.day = {
+            labels: sortedHours.map(h => h + ':00'),
+            temperature: sortedIndices.map(i => suhuData[i]),
+            ph: sortedIndices.map(i => phData[i]),
+            tds: sortedIndices.map(i => tdsData[i]),
+        };
+
+        // Update the paramColors object to match the initial button colors
         const paramColors = {
             temperature: {bg: '#7DBB9C', legend: 'bg-[#7DBB9C]', label: 'Temperature', type: 'bar'},
-            ph: {bg: '#F59E42', legend: 'bg-[#F59E42]', label: 'pH', type: 'bar'},
+            ph: {bg: '#F59E42', legend: 'bg-[#F59E42]', label: 'pH', type: 'bar'},  // Changed from #EAF2BB to #F59E42
             tds: {bg: '#B29776', legend: 'bg-[#B29776]', label: 'TDS', type: 'bar'},
         };
 
@@ -227,29 +256,23 @@
             });
         });
 
-        // Filter parameter (multi select)
+        // Replace the parameter button click handler
         document.querySelectorAll('.param-btn').forEach((btn, idx) => {
             btn.addEventListener('click', function() {
                 const param = this.getAttribute('data-param');
                 const datasetIdx = Object.keys(paramColors).indexOf(param);
-                // Toggle active
+                
                 this.classList.toggle('active');
                 if (this.classList.contains('active')) {
-                    if(param === 'temperature') {
-                        this.classList.add('bg-[#7DBB9C]', 'text-[#3B240C]');
-                    } else if(param === 'ph') {
-                        this.classList.add('bg-[#EAF2BB]', 'text-[#3B240C]');
-                    } else if(param === 'tds') {
-                        this.classList.add('bg-[#B29776]', 'text-[#3B240C]');
-                    }
-                    mainChart.data.datasets[datasetIdx].hidden = false;
+                    // Use consistent colors from paramColors
+                    this.style.backgroundColor = paramColors[param].bg;
+                    this.classList.add('text-[#3B240C]');
                 } else {
-                    this.classList.remove(
-                        'bg-[#7DBB9C]','bg-[#EAF2BB]','bg-[#B29776]',
-                        'text-[#3B240C]'
-                    );
-                    mainChart.data.datasets[datasetIdx].hidden = true;
+                    // Remove background completely when inactive
+                    this.style.backgroundColor = 'transparent';
+                    this.classList.remove('text-[#3B240C]');
                 }
+                mainChart.data.datasets[datasetIdx].hidden = !this.classList.contains('active');
                 mainChart.update();
             });
         });

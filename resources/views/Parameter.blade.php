@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
     <title>Parameter</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/logo.png') }}">
     <style>
         .sidebar-link {
             transition: transform 0.15s, font-weight 0.15s, color 0.15s;
@@ -50,8 +51,8 @@
         <!-- Ringkasan status & notifikasi -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 mb-8">
             <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] text-white p-4 rounded-2xl shadow-lg text-center flex flex-col items-center hover:scale-105 transition">
-                <div class="text-4xl font-bold">3</div>
-                <div class="text-sm">Tanaman Aktif</div>
+                <div class="text-4xl font-bold">1</div>
+                <div class="text-sm">Sensor Aktif</div>
             </div>
             <div class="bg-gradient-to-br from-[#118B50] to-[#4A321D] text-white p-4 rounded-2xl shadow-lg text-center flex flex-col items-center hover:scale-105 transition">
                 <div class="text-4xl font-bold">0</div>
@@ -102,6 +103,32 @@
         const suhuData = {!! json_encode($chartData->pluck('suhu')->map(fn($v) => (float)$v)) !!};
         const phData = {!! json_encode($chartData->pluck('pH')->map(fn($v) => (float)$v)) !!};
         const tdsData = {!! json_encode($chartData->pluck('TDS')->map(fn($v) => (float)$v)) !!};
+        const createdAtData = {!! json_encode($chartData->pluck('created_at')) !!};
+
+        // Filter minggu: 7 tanggal unik terakhir
+        const uniqueDates = [];
+        const uniqueIndices = [];
+        for (let i = chartLabels.length - 1; i >= 0; i--) {
+            const date = chartLabels[i];
+            if (!uniqueDates.includes(date)) {
+                uniqueDates.push(date);
+                uniqueIndices.push(i);
+                if (uniqueDates.length === 7) break;
+            }
+        }
+        uniqueIndices.reverse();
+
+        // Filter hari: data tanggal terakhir, dipisah per jam dari kolom created_at
+        const lastDate = createdAtData.length > 0 ? createdAtData[createdAtData.length - 1].slice(0, 10) : null;
+        const hourMap = {};
+        for (let i = 0; i < createdAtData.length; i++) {
+            if (createdAtData[i].slice(0, 10) === lastDate) {
+                const hour = createdAtData[i].slice(0, 13); // YYYY-MM-DD HH
+                hourMap[hour] = i;
+            }
+        }
+        const sortedHours = Object.keys(hourMap).sort();
+        const sortedIndices = sortedHours.map(h => hourMap[h]);
 
         const chartData = {
             month: {
@@ -111,16 +138,16 @@
                 tds: tdsData,
             },
             week: {
-                labels: chartLabels.slice(-7),
-                temperature: suhuData.slice(-7),
-                ph: phData.slice(-7),
-                tds: tdsData.slice(-7),
+                labels: uniqueIndices.map(i => chartLabels[i]),
+                temperature: uniqueIndices.map(i => suhuData[i]),
+                ph: uniqueIndices.map(i => phData[i]),
+                tds: uniqueIndices.map(i => tdsData[i]),
             },
             day: {
-                labels: chartLabels.slice(-1),
-                temperature: suhuData.slice(-1),
-                ph: phData.slice(-1),
-                tds: tdsData.slice(-1),
+                labels: sortedHours.map(h => h + ':00'),
+                temperature: sortedIndices.map(i => suhuData[i]),
+                ph: sortedIndices.map(i => phData[i]),
+                tds: sortedIndices.map(i => tdsData[i]),
             }
         };
         let currentTime = 'month';

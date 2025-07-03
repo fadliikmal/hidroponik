@@ -36,10 +36,12 @@ class unsurController extends Controller
 
     public function sensor()
     {
-        $latest = unsur::orderBy('record_date', 'desc')->first();
+        // Ambil data paling terbaru saja
+        $latest = unsur::latest('record_date')->first();
+        
+        // Ambil semua data untuk chart, terurut dari lama ke baru
         $chartData = unsur::orderBy('record_date', 'asc')->get();
 
-        // Tampilkan ke halaman sensor
         return view('sensor', [
             'latest' => $latest,
             'chartData' => $chartData
