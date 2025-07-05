@@ -67,7 +67,7 @@ class unsurController extends Controller
             unsur::create([
                 'record_date' => $data['created_at'] ?? now()->toDateString(),
                 'pH'         => $data['ph'] ?? null,
-                // 'TDS'        => $data['tds'] ?? null,
+                'TDS'        => $data['tds'] ?? null,
                 'suhu'       => $data['temperature'] ?? null,
             ]);
 
@@ -91,7 +91,7 @@ class unsurController extends Controller
 
                 $exists = unsur::where('record_date', $recordDate)
                     ->where('pH', $data['ph'] ?? null)
-                    // ->where('TDS', $data['tds'] ?? null)
+                    ->where('TDS', $data['tds'] ?? null)
                     ->where('suhu', $data['temperature'] ?? null)
                     ->exists();
 
@@ -99,7 +99,7 @@ class unsurController extends Controller
                     unsur::create([
                         'record_date' => $recordDate,
                         'pH'         => $data['ph'] ?? null,
-                        // 'TDS'        => $data['tds'] ?? null,
+                        'TDS'        => $data['tds'] ?? null,
                         'suhu'       => $data['temperature'] ?? null,
                     ]);
                 }
