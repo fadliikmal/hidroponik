@@ -34,8 +34,8 @@ class FetchUnsurFromApi extends Command
 
             // Ambil data paling baru saja
             if (is_array($datas) && count($datas) > 0) {
-                // Jika data sudah terurut, ambil data terakhir
-                $latestData = end($datas);
+                // Ambil data paling baru (paling depan)
+                $latestData = $datas[0];
 
                 $recordDate = isset($latestData['created_at'])
                     ? Carbon::parse($latestData['created_at'])->format('Y-m-d H:i:s')
