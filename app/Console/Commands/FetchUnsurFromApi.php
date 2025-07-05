@@ -32,42 +32,34 @@ class FetchUnsurFromApi extends Command
         if ($response->successful()) {
             $datas = $response->json();
 
+            // Ambil data paling baru saja
             if (is_array($datas) && count($datas) > 0) {
-                $lastHour = null;
-                foreach ($datas as $data) {
-                    if (!isset($data['created_at'])) continue;
-                    $created = Carbon::parse($data['created_at']);
-                    if ($created->lt(Carbon::create(2025, 6, 3))) continue;
+                // Ambil data paling baru (paling depan)
+                $latestData = $datas[0];
 
-                    // Ambil hanya data di menit 0 (tiap jam saja)
-                    if ($created->minute !== 0) continue;
+                $recordDate = isset($latestData['created_at'])
+                    ? Carbon::parse($latestData['created_at'])->format('Y-m-d H:i:s')
+                    : now();
 
-                    // Hindari duplikasi jam jika ada lebih dari satu data di jam yang sama
-                    $hourKey = $created->format('Y-m-d H');
-                    if ($lastHour === $hourKey) continue;
-                    $lastHour = $hourKey;
+                $exists = unsur::where('record_date', $recordDate)
+                    ->where('pH', $latestData['ph'] ?? null)
+                    ->where('suhu', $latestData['temperature'] ?? null)
+                    ->where('TDS', $latestData['tds'] ?? null)
+                    ->exists();
 
-                    $recordDate = $created->format('Y-m-d H:i:s');
-
-                    $exists = unsur::where('record_date', $recordDate)
-                        ->where('pH', $data['ph'] ?? null)
-                        ->where('suhu', $data['temperature'] ?? null)
-                        ->where('TDS', $data['tds'] ?? null)
-                        ->exists();
-
-                    if (!$exists) {
-                        unsur::create([
-                            'record_date' => $recordDate,
-                            'pH'          => $data['ph'] ?? null,
-                            'suhu'        => $data['temperature'] ?? null,
-                            'TDS'         => $data['tds'] ?? null,
-                        ]);
-                        $this->info('Data pada ' . $recordDate . ' berhasil ditambahkan.');
-                    }
+                if (!$exists) {
+                    unsur::create([
+                        'record_date' => $recordDate,
+                        'pH'          => $latestData['ph'] ?? null,
+                        'suhu'        => $latestData['temperature'] ?? null,
+                        'TDS'         => $latestData['tds'] ?? null,
+                    ]);
+                    $this->info('Data baru berhasil ditambahkan.');
+                } else {
+                    $this->info('Data sudah ada, tidak ditambahkan ulang.');
                 }
-                $this->info('Proses import selesai.');
             } else {
-                $this->error('Tidak ada data dari API');
+                $this->error('Tidak ada data terbaru dari API');
             }
         } else {
             $this->error('Gagal ambil data API');
